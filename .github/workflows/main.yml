@@ -1,0 +1,53 @@
+name: Java CI
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          check-latest: true
+
+      - name: Initialize gradle caching
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          concurrent: true
+
+      - name: Build with Gradle
+        run: ./gradlew checkLicenses build test check shadowJar --stacktrace
+
+      - name: Prepare version candidate ZIP
+        run: |
+          mkdir -p temp/;
+          cp license.txt temp/license.txt;
+          cp ps-plugin-spigot/build/libs/ps-plugin-spigot.jar temp/plugin-spigot.jar
+
+          mkdir temp/dev;
+          cp */build/libs/*-javadoc.jar temp/dev;
+          cp ps-api/build/libs/ps-api.jar temp/dev/api.jar
+
+          mkdir temp/modules;
+          cp ps-cloudnet2/build/libs/ps-cloudnet2.jar temp/modules/cloudnet2.jar;
+          cp ps-cloudnet2-legacy/build/libs/ps-cloudnet2-legacy.jar temp/modules/cloudnet2-legacy.jar;
+          cp ps-cloudnet3/build/libs/ps-cloudnet3.jar temp/modules/cloudnet3.jar;
+          cp ps-lobby-spigot/build/libs/ps-lobby-spigot.jar temp/modules/lobby-spigot.jar;
+          cp ps-runner-spigot/build/libs/ps-runner-spigot.jar temp/modules/runner-spigot.jar;
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ps-system
+          path: temp/
