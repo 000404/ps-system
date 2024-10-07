@@ -4,6 +4,8 @@ This private server system is designed for very complex networks (maybe with the
 **modular structure** the system is very flexible and has no need to load classes which are not required for the current
 running environment.
 
+Trying this project...
+
 ## How to use
 ##### Download
 You can Download the latest build from here: https://github.com/derklaro/ps-system/actions
