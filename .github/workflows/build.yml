@@ -43,3 +43,17 @@ jobs:
           path: temp/
           if-no-files-found: error # Optional: fail the workflow if no files are found
           retention-days: 90 # Optional: number of days to keep artifacts (default is 90)
+  
+  # Add a new job that depends on the build job and demonstrates downloading the artifact
+  download:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ps-system
+          path: downloaded-artifacts
+      
+      - name: Display structure of downloaded files
+        run: ls -R downloaded-artifacts
