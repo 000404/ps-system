@@ -37,7 +37,7 @@ jobs:
           cp ps-lobby-spigot/build/libs/ps-lobby-spigot.jar temp/modules/lobby-spigot.jar;
           cp ps-runner-spigot/build/libs/ps-runner-spigot.jar temp/modules/runner-spigot.jar;
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db98cd1bd7139b4f # v3
         with:
           name: ps-system
           path: temp/
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: ps-system
           path: downloaded-artifacts
