@@ -37,23 +37,7 @@ jobs:
           cp ps-lobby-spigot/build/libs/ps-lobby-spigot.jar temp/modules/lobby-spigot.jar;
           cp ps-runner-spigot/build/libs/ps-runner-spigot.jar temp/modules/runner-spigot.jar;
       - name: Upload artifact
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db98cd1bd7139b4f # v3
+        uses: actions/upload-artifact@v2
         with:
           name: ps-system
           path: temp/
-          if-no-files-found: error # Optional: fail the workflow if no files are found
-          retention-days: 90 # Optional: number of days to keep artifacts (default is 90)
-  
-  # Add a new job that depends on the build job and demonstrates downloading the artifact
-  download:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: ps-system
-          path: downloaded-artifacts
-      
-      - name: Display structure of downloaded files
-        run: ls -R downloaded-artifacts
