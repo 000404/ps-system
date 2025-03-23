@@ -36,8 +36,16 @@ jobs:
           cp ps-cloudnet3/build/libs/ps-cloudnet3.jar temp/modules/cloudnet3.jar;
           cp ps-lobby-spigot/build/libs/ps-lobby-spigot.jar temp/modules/lobby-spigot.jar;
           cp ps-runner-spigot/build/libs/ps-runner-spigot.jar temp/modules/runner-spigot.jar;
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+      # Create artifact using native GitHub API commands instead of actions
+      - name: Archive production artifacts without using upload-artifact
+        run: |
+          cd temp
+          zip -r ../ps-system.zip .
+          echo "::set-output name=artifact_path::ps-system.zip"
+        id: archive
+      # Upload by creating a release if this is a tag
+      - name: Create Release if tag
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
         with:
-          name: ps-system
-          path: temp/
+          files: ps-system.zip
